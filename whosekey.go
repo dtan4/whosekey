@@ -11,13 +11,21 @@ import (
 
 const Usage = `
 Usage:
-  $ whosekey <AWS_ACCESS_KEY_ID>
+  $ whosekey AWS_ACCESS_KEY_ID
+
+Options:
+  -h, --help Show this usage
 `
 
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Fprintln(os.Stderr, Usage)
 		os.Exit(1)
+	}
+
+	if os.Args[1] == "-h" || os.Args[1] == "--help" {
+		fmt.Println(Usage)
+		return
 	}
 
 	accessKeyId := os.Args[1]
