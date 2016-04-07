@@ -3,6 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/iam"
 )
 
 const Usage = `
@@ -16,6 +20,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	access_key_id := os.Args[1]
-	fmt.Println(access_key_id)
+	accessKeyId := os.Args[1]
+	svc := iam.New(session.New(), &aws.Config{})
+
+	resp, err := svc.ListAccessKeys(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, accessKey := range resp.AccessKeyMetadata {
+		if *accessKey.AccessKeyId == accessKeyId {
+			fmt.Println(*accessKey.UserName)
+			return
+		}
+	}
+
+	fmt.Fprintln(os.Stderr, "Nobody has the specified access key.")
+	os.Exit(1)
 }
