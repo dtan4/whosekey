@@ -1,5 +1,8 @@
+BINARY := whosekey
+BINARY_DIR := bin
+
 build:
-	go build
+	go build -o $(BINARY_DIR)/$(BINARY)
 
 deps:
 	go get github.com/Masterminds/glide
@@ -8,4 +11,4 @@ deps:
 install:
 	go install
 
-PHONY: build
+PHONY: build deps install
